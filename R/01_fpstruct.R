@@ -117,7 +117,8 @@ par_struct <- function( nrow, keys,
                         border.width.bottom = 0, border.width.top = 0, border.width.left = 0, border.width.right = 0,
                         border.color.bottom = "transparent", border.color.top = "transparent", border.color.left = "transparent", border.color.right = "transparent",
                         border.style.bottom = "solid", border.style.top = "solid", border.style.left = "solid", border.style.right = "solid",
-                        shading.color = "transparent" ){
+                        shading.color = "transparent",
+                        keep.next = FALSE){
 
   x <- list(
     text.align = fpstruct(nrow = nrow, keys = keys, default = text.align),
@@ -142,7 +143,9 @@ par_struct <- function( nrow, keys,
     border.style.left = fpstruct(nrow = nrow, keys = keys, default = border.style.left),
     border.style.right = fpstruct(nrow = nrow, keys = keys, default = border.style.right),
 
-    shading.color = fpstruct(nrow = nrow, keys = keys, default = shading.color)
+    shading.color = fpstruct(nrow = nrow, keys = keys, default = shading.color),
+
+    keep.next = fpstruct(nrow = nrow, keys = keys, default = keep.next)
   )
   class(x) <- "par_struct"
   x
@@ -225,6 +228,8 @@ add_parstyle_column <- function(x, type = "html"){
                            padding.bottom, padding.top, padding.left, padding.right, shading, "\"" )
   } else if( type %in% "wml"){
 
+    keepnext <- ifelse(x$keepnext, "<w:keepNext/>", "")
+
     shading <- ifelse( colalpha(x$shading.color) > 0,
             sprintf("<w:shd w:val=\"clear\" w:color=\"auto\" w:fill=\"%s\"/>", colcode0(x$shading.color) ),
             "")
@@ -249,7 +254,7 @@ add_parstyle_column <- function(x, type = "html"){
     padding <- sprintf("<w:spacing w:after=\"%.0f\" w:before=\"%.0f\"/><w:ind w:firstLine=\"0\" w:left=\"%.0f\" w:right=\"%.0f\"/>",
                        x$padding.bottom*20, x$padding.top*20, x$padding.left*20, x$padding.right*20 )
 
-    style_column <- paste0("<w:pPr>", textalign, bb, bt, bl, br,
+    style_column <- paste0("<w:pPr>", keepnext, textalign, bb, bt, bl, br,
                            padding, shading, "</w:pPr>" )
   } else if( type %in% "pml"){
 
