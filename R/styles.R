@@ -355,6 +355,42 @@ align <- function(x, i = NULL, j = NULL, align = "left",
   x
 }
 
+
+#' @export
+#' @title Set Keep with next attribute
+#' @description set or unset "Keep with next" attribute of selected rows of a flextable. Only applies when inserting into a Word document.
+#' @param x a flextable object
+#' @param i rows selection
+#' @param part partname of the table (one of 'all', 'body', 'header', 'footer')
+#' @param keepnext TRUE to set Keep with next, FALSE to unset
+#' @family sugar functions for table style
+#' @examples
+#' ft <- flextable(mtcars)
+#' ft <- keepnext(ft)
+keepnext <- function(x, i = NULL, keepnext = TRUE,
+                     part = "body" ){
+
+  if( !inherits(x, "flextable") ) stop("keepnext supports only flextable objects.")
+  part <- match.arg(part, c("all", "body", "header", "footer"), several.ok = FALSE )
+
+  if( part == "all" ){
+    for( p in c("header", "body", "footer") ){
+      x <- keepnext(x = x, i = i, keepnext = keepnext, part = p)
+    }
+    return(x)
+  }
+
+  if( nrow_part(x, part) < 1 )
+    return(x)
+
+  check_formula_i_and_part(i, part)
+  i <- get_rows_id(x[[part]], i )
+  j <- get_columns_id(x[[part]], NULL )
+  x[[part]]$styles$pars[i, j, "keep.next"] <- keepnext
+
+  x
+}
+
 #' @export
 #' @rdname align
 #' @param header should the header be aligned with the body
