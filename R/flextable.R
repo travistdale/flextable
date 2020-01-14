@@ -17,6 +17,7 @@
 #' @param col_keys columns names/keys to display. If some column names are not in
 #' the dataset, they will be added as blank columns by default.
 #' @param cwidth,cheight initial width and height to use for cell sizes in inches.
+#' @param header_col the name or number of a column that contains row headers
 #' @param defaults a list of default values for formats, supported options are
 #' \code{fontname}, \code{font.size}, \code{color} and \code{padding}.
 #' @param theme_fun a function theme to apply before returning the flextable.
@@ -29,7 +30,7 @@
 #' @export
 #' @importFrom stats setNames
 #' @importFrom gdtools font_family_exists
-flextable <- function( data, col_keys = names(data), cwidth = .75, cheight = .25,
+flextable <- function( data, col_keys = names(data), cwidth = .75, cheight = .25, header_col = NULL,
                        defaults = list(), theme_fun = theme_booktabs ){
 
 
@@ -47,20 +48,37 @@ flextable <- function( data, col_keys = names(data), cwidth = .75, cheight = .25
     data[blanks] <- blanks_col
   }
 
-  body <- complex_tabpart( data = data, col_keys = col_keys, cwidth = cwidth, cheight = cheight )
+  if (!is.null(header_col)) {
+    if (is.numeric(header_col) & header_col > 0) {
+      if (header_col <= length(col_keys)) {
+        header_col <- col_keys[header_col]
+      }
+      else {
+        header_col <- NULL
+        warning("header column # greater than the number of supplied col_keys. header column set to NULL. set with header_col()")
+      }
+    }
+    else if (!(header_col %in% col_keys)) {
+      header_col <- NULL
+      warning("header column not present in col_keys. header column set to NULL. set with header_col()")
+    }
+  }
+
+  body <- complex_tabpart( data = data, col_keys = col_keys, cwidth = cwidth, cheight = cheight, header_col = header_col )
 
   # header
   header_data <- setNames(as.list(col_keys), col_keys)
   header_data[blanks] <- as.list( rep("", length(blanks)) )
   header_data <- as.data.frame(header_data, stringsAsFactors = FALSE, check.names = FALSE)
 
-  header <- complex_tabpart( data = header_data, col_keys = col_keys, cwidth = cwidth, cheight = cheight )
+  header <- complex_tabpart( data = header_data, col_keys = col_keys, cwidth = cwidth, cheight = cheight, header_col = header_col )
 
   # header
   footer_data <- header_data[FALSE, , drop = FALSE]
-  footer <- complex_tabpart( data = footer_data, col_keys = col_keys, cwidth = cwidth, cheight = cheight )
+  footer <- complex_tabpart( data = footer_data, col_keys = col_keys, cwidth = cwidth, cheight = cheight, header_col = header_col )
 
   out <- list( header = header, body = body, footer = footer, col_keys = col_keys,
+               header_col = header_col,
                caption = list(value = NULL, style_id = NULL),
                blanks = blanks )
   class(out) <- c("flextable")

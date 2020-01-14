@@ -3,7 +3,8 @@ complex_tabpart <- function( data, col_keys = names(data),
                              default_pr_text = fp_text(),
                              default_pr_par = fp_par(),
                              default_pr_cell = fp_cell(border = fp_border(color = "transparent")),
-                             cwidth = NULL, cheight = NULL ){
+                             cwidth = NULL, cheight = NULL,
+                             header_col = header_col){
 
   pr_cell_init <- as_struct(nrow(data), col_keys, default_pr_cell, cell_struct)
   pr_par_init <- as_struct(nrow(data), col_keys, default_pr_par, par_struct)
@@ -35,6 +36,7 @@ complex_tabpart <- function( data, col_keys = names(data),
                col_keys = col_keys,
                colwidths = colwidths,
                rowheights = rowheights,
+               header_col = header_col,
                spans = spans,
                styles = list(
                  cells = pr_cell_init, pars = pr_par_init,

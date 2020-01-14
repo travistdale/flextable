@@ -600,3 +600,35 @@ empty_blanks <- function(x){
 
 }
 
+
+
+#' @export
+#' @title Set the column that contains row headers
+#' @description set the column which contains row headers. Only applies to html tables.
+#' @param x a flextable object
+#' @param j column selection
+#' @param part partname of the table (one of 'all', 'body', 'header', 'footer')
+#' @family sugar functions for table style
+#' @examples
+#' ft <- flextable(mtcars)
+#' ft <- header_col(ft, j = 1)
+header_col <- function(x, j = 1, part = "body" ){
+
+  if( !inherits(x, "flextable") ) stop("header_col supports only flextable objects.")
+  part <- match.arg(part, c("all", "body", "header", "footer"), several.ok = FALSE )
+
+  if( part == "all" ){
+    for( p in c("header", "body", "footer") ){
+      x <- header_col(x = x, j = j, part = p)
+    }
+    return(x)
+  }
+
+  if( nrow_part(x, part) < 1 )
+    return(x)
+
+  j <- get_columns_id(x[[part]], j )
+  x[[part]]$header_col <- j
+
+  x
+}
