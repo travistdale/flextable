@@ -89,7 +89,8 @@ format.complex_tabpart <- function( x, type = "wml", header = FALSE,
   paragraphs <- par_data(x$styles$pars, txt_data, type = type)
   cells <- cell_data(x$styles$cells, paragraphs, type = type,
                      span_rows = x$spans$rows,
-                     span_columns = x$spans$columns, x$colwidths, x$rowheights)
+                     span_columns = x$spans$columns, x$colwidths, x$rowheights,
+                     header = header)
   setDT(cells)
   cells <- dcast(cells, row_id ~ col_id, drop=FALSE, fill="", value.var = "cell_str", fun.aggregate = I)
   cells$row_id <- NULL

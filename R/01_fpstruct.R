@@ -483,7 +483,7 @@ add_cellstyle_column <- function(x, type = "html"){
   x[, c("row_id", "col_id", "style_str")]
 }
 
-cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, rowheights){
+cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, rowheights, header = FALSE){
   x[,, "width"] <- rep(colwidths, each = x$vertical.align$nrow)
   x[,, "height"] <- rep(rowheights, x$vertical.align$ncol)
   cells <- as.data.frame(x)
@@ -536,7 +536,10 @@ cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, row
     rotated <- text_directions %in% c("btlr", "tbrl")
     class_[rotated] <- sprintf(" class=\"%s\"", text_directions[rotated])
 
-    str <- paste0("<td", class_, tc_attr, " style=\"", dat$style_str ,"\">", dat$par_str, "</td>")
+    str <- paste0(ifelse(header, '<th scope="col"', "<td"),
+                  class_, tc_attr, " style=\"", dat$style_str ,"\">", dat$par_str,
+                  ifelse(header, "</th>", "</td>")
+                  )
     str[span_rows < 1 | span_columns < 1] <- ""
     dat$cell_str <- str
   }
