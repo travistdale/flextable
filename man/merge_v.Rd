@@ -9,7 +9,8 @@ merge_v(x, j = NULL, target = NULL, part = "body")
 \arguments{
 \item{x}{\code{flextable} object}
 
-\item{j}{column to used to find consecutive values to be merged.}
+\item{j}{column to used to find consecutive values to be merged. Columns
+from orignal dataset can also be used.}
 
 \item{target}{columns names where cells have to be merged.}
 
@@ -18,7 +19,7 @@ merge_v(x, j = NULL, target = NULL, part = "body")
 \description{
 Merge flextable cells vertically when consecutive cells have
 identical values. Text of formatted values are used to compare
-values.
+values if available.
 }
 \examples{
 ft_merge <- flextable(mtcars)
