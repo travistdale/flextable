@@ -38,6 +38,7 @@ Other sugar functions for table style:
 \code{\link{fontsize}()},
 \code{\link{font}()},
 \code{\link{italic}()},
+\code{\link{keepnext}()},
 \code{\link{padding}()},
 \code{\link{rotate}()}
 }
