@@ -228,11 +228,7 @@ add_parstyle_column <- function(x, type = "html"){
                            padding.bottom, padding.top, padding.left, padding.right, shading, "\"" )
   } else if( type %in% "wml"){
 
-<<<<<<< HEAD
     keepnext <- ifelse(x$keep.next, "<w:keepNext/>", "")
-=======
-    keepnext <- ifelse(x$keepnext, "<w:keepNext/>", "")
->>>>>>> 1a30747913a3a41f34810643be88933742d3eefb
 
     shading <- ifelse( colalpha(x$shading.color) > 0,
             sprintf("<w:shd w:val=\"clear\" w:color=\"auto\" w:fill=\"%s\"/>", colcode0(x$shading.color) ),
