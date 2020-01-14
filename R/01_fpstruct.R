@@ -536,13 +536,19 @@ cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, row
     rotated <- text_directions %in% c("btlr", "tbrl")
     class_[rotated] <- sprintf(" class=\"%s\"", text_directions[rotated])
 
-    str <- paste0(ifelse(header,
+    if (is.null(header_col)) {
+      header_check <- FALSE
+    } else {
+      header_check <- dat$col_id == header_col
+    }
+
+    str <- paste0(ifelse(rep(header, nrow(dat)),
                          "<th scope=\"col\"",
-                         ifelse(dat$col_id == header_col,
+                         ifelse(header_check,
                                 "<th scope = \"row\"",
                                 "<td")),
                   class_, tc_attr, " style=\"", dat$style_str ,"\">", dat$par_str,
-                  ifelse(header | (dat$col_id == header_col),
+                  ifelse(header | header_check,
                          "</th>",
                          "</td>")
                   )

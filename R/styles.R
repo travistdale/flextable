@@ -628,7 +628,7 @@ header_col <- function(x, j = 1, part = "body" ){
     return(x)
 
   j <- get_columns_id(x[[part]], j )
-  x[[part]]$header_col <- j
+  x[[part]]$header_col <- x[[part]]$col_keys[j]
 
   x
 }
