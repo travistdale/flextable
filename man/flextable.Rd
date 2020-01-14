@@ -11,6 +11,7 @@ flextable(
   col_keys = names(data),
   cwidth = 0.75,
   cheight = 0.25,
+  header_col = NULL,
   defaults = list(),
   theme_fun = theme_booktabs
 )
@@ -26,6 +27,8 @@ regulartable(data, col_keys = names(data), cwidth = 0.75, cheight = 0.25)
 the dataset, they will be added as blank columns by default.}
 
 \item{cwidth, cheight}{initial width and height to use for cell sizes in inches.}
+
+\item{header_col}{the name or number of a column that contains row headers}
 
 \item{defaults}{a list of default values for formats, supported options are
 \code{fontname}, \code{font.size}, \code{color} and \code{padding}.}

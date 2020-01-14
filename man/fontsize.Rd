@@ -32,6 +32,7 @@ Other sugar functions for table style:
 \code{\link{color}()},
 \code{\link{empty_blanks}()},
 \code{\link{font}()},
+\code{\link{header_col}()},
 \code{\link{italic}()},
 \code{\link{keepnext}()},
 \code{\link{padding}()},

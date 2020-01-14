@@ -41,6 +41,7 @@ Other sugar functions for table style:
 \code{\link{color}()},
 \code{\link{fontsize}()},
 \code{\link{font}()},
+\code{\link{header_col}()},
 \code{\link{italic}()},
 \code{\link{keepnext}()},
 \code{\link{padding}()},
