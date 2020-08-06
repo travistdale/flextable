@@ -4,12 +4,15 @@
 \alias{as_raster}
 \title{get a flextable as a raster}
 \usage{
-as_raster(x, zoom = 2, expand = 2)
+as_raster(x, zoom = 2, expand = 2, webshot = "webshot")
 }
 \arguments{
 \item{x}{a flextable object}
 
 \item{zoom, expand}{parameters used by \code{webshot} function.}
+
+\item{webshot}{webshot package as a scalar character, one of "webshot" or
+"webshot2".}
 }
 \description{
 save a flextable as an image and return the corresponding
@@ -31,12 +34,13 @@ if( require("ggplot2") && require("webshot") ){
 \seealso{
 Other flextable print function: 
 \code{\link{docx_value}()},
-\code{\link{format.flextable}()},
 \code{\link{htmltools_value}()},
 \code{\link{knit_print.flextable}()},
 \code{\link{plot.flextable}()},
 \code{\link{print.flextable}()},
+\code{\link{save_as_docx}()},
 \code{\link{save_as_html}()},
-\code{\link{save_as_image}()}
+\code{\link{save_as_image}()},
+\code{\link{save_as_pptx}()}
 }
 \concept{flextable print function}

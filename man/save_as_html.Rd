@@ -2,20 +2,22 @@
 % Please edit documentation in R/printers.R
 \name{save_as_html}
 \alias{save_as_html}
-\title{save a flextable in an HTML file}
+\title{Save a Flextable in an HTML File}
 \usage{
-save_as_html(x, path)
+save_as_html(x, path, encoding = "utf-8")
 }
 \arguments{
 \item{x}{a flextable object}
 
 \item{path}{HTML file to be created}
+
+\item{encoding}{encoding to be used in the HTML file}
 }
 \description{
 save a flextable in an HTML file. This function
-has been implemented to help users that do not understand
-R Markdown. It is highly recommanded to use R Markdown
-instead.
+is useful to save the flextable in HTML file without using
+R Markdown (it is highly recommanded to use R Markdown
+instead).
 }
 \examples{
 ft <- flextable( head( mtcars ) )
@@ -26,11 +28,12 @@ save_as_html(ft, tf)
 Other flextable print function: 
 \code{\link{as_raster}()},
 \code{\link{docx_value}()},
-\code{\link{format.flextable}()},
 \code{\link{htmltools_value}()},
 \code{\link{knit_print.flextable}()},
 \code{\link{plot.flextable}()},
 \code{\link{print.flextable}()},
-\code{\link{save_as_image}()}
+\code{\link{save_as_docx}()},
+\code{\link{save_as_image}()},
+\code{\link{save_as_pptx}()}
 }
 \concept{flextable print function}

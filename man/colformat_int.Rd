@@ -29,7 +29,7 @@ row selector.}
 \item{col_keys}{names of the colkeys. Will be deprectated in favor of j in the next
 version.}
 
-\item{big.mark}{see \code{\link[base]{formatC}}}
+\item{big.mark}{see \code{\link[=formatC]{formatC()}}}
 
 \item{na_str}{string to be used for NA values}
 
@@ -40,19 +40,24 @@ version.}
 \description{
 Format integer cells in a flextable.
 }
-\examples{
-dat <- mtcars
+\section{Illustrations}{
 
-ft <- flextable(dat)
-colkeys <- c("vs", "am", "gear", "carb")
-ft <- colformat_int(x = ft, col_keys = colkeys, prefix = "# ")
-autofit(ft)
+
+\if{html}{\figure{fig_colformat_int_1.png}{options: width=100\%}}
+}
+
+\examples{
+ft <- flextable(head(mtcars))
+j <- c("vs", "am", "gear", "carb")
+ft <- colformat_int(x = ft, j = j, prefix = "# ")
+ft
 }
 \seealso{
 Other cells formatters: 
 \code{\link{colformat_char}()},
 \code{\link{colformat_lgl}()},
 \code{\link{colformat_num}()},
-\code{\link{compose}()}
+\code{\link{compose}()},
+\code{\link{set_formatter}()}
 }
 \concept{cells formatters}

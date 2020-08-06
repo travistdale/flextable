@@ -1,4 +1,4 @@
-#' @importFrom officer fp_sign fp_cell fp_par fp_text fp_border
+#' @importFrom officer fp_cell fp_par fp_text fp_border
 complex_tabpart <- function( data, col_keys = names(data),
                              default_pr_text = fp_text(),
                              default_pr_par = fp_par(),
@@ -14,7 +14,7 @@ complex_tabpart <- function( data, col_keys = names(data),
   if( nrow(data) > 0 ){
 
     newcontent <- lapply(data[col_keys], function(x)
-      as_paragraph(as_chunk(x, formater = function(x) {
+      as_paragraph(as_chunk(x, formatter = function(x) {
         if( is.character(x) || is.factor(x) ) format_fun(x)
         else format(x, trim = TRUE)
 
@@ -37,6 +37,7 @@ complex_tabpart <- function( data, col_keys = names(data),
                colwidths = colwidths,
                rowheights = rowheights,
                header_col = header_col,
+               hrule = rep("auto", nrow(data)),
                spans = spans,
                styles = list(
                  cells = pr_cell_init, pars = pr_par_init,

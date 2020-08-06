@@ -4,6 +4,11 @@ css_px <- function(x, format = "%.0fpx"){
           ifelse( x < 0.001, "0", sprintf(format, x)) )
 }
 
+css_pt <- function(x){
+  ifelse( is.na(x), "inherit",
+          ifelse( x < 0.001, "0", sprintf("%.0fpt", x)) )
+}
+
 border_css <- function(color, width, style, side){
   style[!style %in% c("dotted", "dashed", "solid")] <- "solid"
   sprintf("border-%s: %s %s %s;", side, css_px(width, "%.2fpx"), style, colcodecss(color))
@@ -43,9 +48,13 @@ border_pml <- function(color, width, style, side){
 #' @importFrom gdtools raster_write raster_str
 #' @importFrom xml2 as_xml_document xml_find_all xml_attr
 format.complex_tabpart <- function( x, type = "wml", header = FALSE,
-                                    split = FALSE, ... ){
+                                    split = FALSE, colwidth = TRUE, ... ){
   stopifnot(length(type) == 1)
   stopifnot( type %in% c("wml", "pml", "html") )
+
+  if(!colwidth){
+    x$colwidths[] <- NA_real_
+  }
 
   if( nrow(x$dataset) < 1 ) return("")
   img_data <- list(
@@ -86,24 +95,28 @@ format.complex_tabpart <- function( x, type = "wml", header = FALSE,
 
   }
 
-  paragraphs <- par_data(x$styles$pars, txt_data, type = type)
+  paragraphs <- par_data(x$styles$pars, txt_data, type = type,
+                         text.direction = x$styles$cells$text.direction$data, valign = x$styles$cells$vertical.align$data)
   cells <- cell_data(x$styles$cells, paragraphs, type = type,
                      span_rows = x$spans$rows,
                      span_columns = x$spans$columns, x$colwidths, x$rowheights,
+                     x$hrule,
+                     text.align = x$styles$pars$text.align$data,
                      header_col = x$header_col,
                      header = header)
+
   setDT(cells)
   cells <- dcast(cells, row_id ~ col_id, drop=FALSE, fill="", value.var = "cell_str", fun.aggregate = I)
   cells$row_id <- NULL
   cells <- apply(as.matrix(cells), 1, paste0, collapse = "")
 
   if( type == "html"){
-    rows <- paste0("<tr>", cells, "</tr>")
+    rows <- paste0(sprintf("<tr%s>", ifelse(x$hrule %in% "exact", "", " style=\"overflow-wrap:break-word;\"")), cells, "</tr>")
   } else if( type == "wml"){
     rows <- paste0( "<w:tr><w:trPr>",
             ifelse(split, "", "<w:cantSplit/>"),
             "<w:trHeight w:val=",
-            shQuote( round(x$rowheights * 72*20, 0 ), type = "cmd"), " w:hRule=\"exact\"/>",
+            shQuote( round(x$rowheights * 72*20, 0 ), type = "cmd"), " w:hRule=\"", ifelse(x$hrule %in% "atleast", "atLeast", x$hrule) ,"\"/>",
             ifelse( header, "<w:tblHeader/>", ""),
             "</w:trPr>", cells, "</w:tr>")
   } else if( type == "pml"){

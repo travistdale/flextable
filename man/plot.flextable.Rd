@@ -11,7 +11,7 @@
 
 \item{zoom, expand}{parameters used by \code{webshot} function.}
 
-\item{...}{additional parameters sent to plot function}
+\item{...}{additional parameters sent to \code{\link[=as_raster]{as_raster()}} function}
 }
 \description{
 save a flextable as an image and display the
@@ -21,11 +21,11 @@ result in a new R graphics window.
 This function requires packages: webshot and magick.
 }
 \examples{
-ft <- flextable( head( mtcars ) )
-ft <- autofit(ft)
+ftab <- flextable( head( mtcars ) )
+ftab <- autofit(ftab)
 \dontrun{
 if( require("webshot") ){
-  plot(ft)
+  plot(ftab)
 }
 }
 }
@@ -33,11 +33,12 @@ if( require("webshot") ){
 Other flextable print function: 
 \code{\link{as_raster}()},
 \code{\link{docx_value}()},
-\code{\link{format.flextable}()},
 \code{\link{htmltools_value}()},
 \code{\link{knit_print.flextable}()},
 \code{\link{print.flextable}()},
+\code{\link{save_as_docx}()},
 \code{\link{save_as_html}()},
-\code{\link{save_as_image}()}
+\code{\link{save_as_image}()},
+\code{\link{save_as_pptx}()}
 }
 \concept{flextable print function}

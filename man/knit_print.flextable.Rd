@@ -14,9 +14,6 @@
 \description{
 Function used to render flextable in knitr/rmarkdown documents.
 HTML, Word and PowerPoint outputs are supported.
-
-Function \code{htmltools_value} return an HTML version of the flextable,
-this function is to be used within Shiny applications with \code{renderUI()}.
 }
 \note{
 For Word (docx) output, if pandoc version >= 2.0 is used, a raw XML block
@@ -40,8 +37,26 @@ accepts values 'left', 'center' and 'right'.
 Word option 'Allow row to break across pages' can be
 activated with chunk option \code{ft.split} set to TRUE.
 
-To specify a Word style for table caption use chunk option
-\code{tab.cap.style}. The default value is "Table Caption".
+Table captioning is a flextable feature compatible with knitr. Three methods are available and are presented below in order of triggering:
+\itemize{
+\item with the \code{set_caption} function, if the function is used, this definition will be chosen.
+\item with knitr's chunk options:
+\itemize{
+\item \code{tab.cap.style}: Word style name to use for table captions.
+\item \code{tab.cap.pre}: Prefix for numbering chunk (default to "Table").
+\item \code{tab.cap.sep}: Suffix for numbering chunk (default to ": ").
+\item \code{tab.cap}: Caption label.
+\item \code{tab.id}: Caption reference unique identifier.
+}
+\item with knitr chunk and bookdown options (if you're in a bookdown):
+\itemize{
+\item \code{tab.cap.style}: Word style name to use for table captions.
+\item \code{tab.cap.pre}: Prefix for numbering chunk (default to "Table").
+\item \code{tab.cap.sep}: Suffix for numbering chunk (default to ": ").
+\item \code{tab.cap}: Caption label.
+\item \code{label}: Caption reference unique identifier.
+}
+}
 }
 
 \section{PowerPoint chunk options}{
@@ -49,32 +64,70 @@ To specify a Word style for table caption use chunk option
 Position should be defined with options \code{ft.left}
 and \code{ft.top}. Theses are the top left coordinates
 of the placeholder that will contain the table. They
-default to \code{{r ft.left=1, ft.left=2}}.
+default to \code{{r ft.left=1, ft.top=2}}.
 }
 
 \section{PDF chunk options}{
 
 
-Using flextable with template `pdf_document` is OK if the
+Using flextable with template \code{pdf_document} is OK if the
 flextable fits on one single page. The PDF output is not
 a real latex output but a PNG image generated with package
 'webshot' or package 'webshot2'. Package 'webshot2' should
 be prefered as 'webshot' can have issues with some properties
 (i.e. bold are not rendered for some users).
 
-To specify usage of 'webshot2', use chunk option `webshot="webshot2"`.
+To specify usage of 'webshot2', use chunk option \code{webshot="webshot2"}.
 }
 
+\examples{
+
+# simple examples -----
+demo_docx <- system.file(package = "flextable", "examples/rmd", "demo.Rmd")
+rmd_file <- tempfile(fileext = ".Rmd")
+file.copy(demo_docx, to = rmd_file, overwrite = TRUE)
+rmd_file # R Markdown document used for demo
+if(require("rmarkdown", quietly = TRUE)){
+#  knitr::opts_chunk$set(webshot = "webshot2")
+#  render(input = rmd_file, output_format = "word_document", output_file = "doc.docx")
+#  render(input = rmd_file, output_format = "pdf_document", output_file = "doc.pdf")
+#  render(input = rmd_file, output_format = "html_document", output_file = "doc.html")
+#  render(input = rmd_file, output_format = "powerpoint_presentation", output_file = "pres.pptx")
+#  render(input = rmd_file, output_format = "slidy_presentation", output_file = "slidy.html")
+#  render(input = rmd_file, output_format = "beamer_presentation", output_file = "beamer.pdf")
+#  render(input = rmd_file, output_format = "pagedown::html_paged", output_file = "paged.html")
+}
+
+
+# looping examples for Word output -----
+demo_loop <- system.file(package = "flextable", "examples/rmd", "loop_docx.Rmd")
+rmd_file <- tempfile(fileext = ".Rmd")
+file.copy(demo_loop, to = rmd_file, overwrite = TRUE)
+rmd_file # R Markdown document used for demo
+if(require("rmarkdown", quietly = TRUE)){
+#  render(input = rmd_file, output_format = "word_document", output_file = "loop_docx.docx")
+}
+
+# looping examples for HTML output -----
+demo_loop <- system.file(package = "flextable", "examples/rmd", "loop_html.Rmd")
+rmd_file <- tempfile(fileext = ".Rmd")
+file.copy(demo_loop, to = rmd_file, overwrite = TRUE)
+rmd_file # R Markdown document used for demo
+if(require("rmarkdown", quietly = TRUE)){
+#  render(input = rmd_file, output_format = "html_document", output_file = "loop_html.html")
+}
+}
 \seealso{
 Other flextable print function: 
 \code{\link{as_raster}()},
 \code{\link{docx_value}()},
-\code{\link{format.flextable}()},
 \code{\link{htmltools_value}()},
 \code{\link{plot.flextable}()},
 \code{\link{print.flextable}()},
+\code{\link{save_as_docx}()},
 \code{\link{save_as_html}()},
-\code{\link{save_as_image}()}
+\code{\link{save_as_image}()},
+\code{\link{save_as_pptx}()}
 }
 \author{
 Maxim Nazarov

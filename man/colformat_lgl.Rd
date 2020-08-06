@@ -41,11 +41,17 @@ version.}
 \description{
 Format logical cells in a flextable.
 }
+\section{Illustrations}{
+
+
+\if{html}{\figure{fig_colformat_lgl_1.png}{options: width=20\%}}
+}
+
 \examples{
 dat <- data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE))
 
 ft <- flextable(dat)
-ft <- colformat_lgl(x = ft, col_keys = c("a", "b"))
+ft <- colformat_lgl(x = ft, j = c("a", "b"))
 autofit(ft)
 }
 \seealso{
@@ -53,6 +59,7 @@ Other cells formatters:
 \code{\link{colformat_char}()},
 \code{\link{colformat_int}()},
 \code{\link{colformat_num}()},
-\code{\link{compose}()}
+\code{\link{compose}()},
+\code{\link{set_formatter}()}
 }
 \concept{cells formatters}

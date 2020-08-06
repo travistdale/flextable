@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -36,8 +40,12 @@
 
 
 <meta property="og:title" content="rotate cell text — rotate" />
-<meta property="og:description" content="apply a rotation to cell text" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:description" content="apply a rotation to cell text. The text direction can
+be &quot;lrtb&quot; which mean from left to right and top to bottom (the default direction).
+In some cases, it can be useful to be able
+to change the direction, when the table headers are huge for example, header labels can
+be rendered as &quot;tbrl&quot; (top to bottom and right to left) corresponding to a 90 degrees rotation
+or &quot;btlr&quot; corresponding to a 270 degrees rotation." />
 
 
 
@@ -55,7 +63,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flextable</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.10</span>
       </span>
     </div>
 
@@ -85,16 +93,28 @@
   <a href="../articles/layout.html">Layout</a>
 </li>
 <li>
-  <a href="../articles/format.html">Format visual properties</a>
+  <a href="../articles/format.html">Visual properties</a>
 </li>
 <li>
   <a href="../articles/display.html">Format Content</a>
 </li>
-<li>
-  <a href="../articles/offcran/images.html">Render as image</a>
-</li>
-<li>
-  <a href="../articles/offcran/examples.html">Examples</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/offcran/images.html">As image</a>
+    </li>
+    <li>
+      <a href="../articles/offcran/as_flextable.html">as flextable</a>
+    </li>
+    <li>
+      <a href="../articles/offcran/examples.html">Examples</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -121,12 +141,17 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>rotate cell text</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/davidgohel/flextable/blob/master/R/styles.R'><code>R/styles.R</code></a></small>
     <div class="hidden name"><code>rotate.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>apply a rotation to cell text</p>
+    <p>apply a rotation to cell text. The text direction can
+be "lrtb" which mean from left to right and top to bottom (the default direction).
+In some cases, it can be useful to be able
+to change the direction, when the table headers are huge for example, header labels can
+be rendered as "tbrl" (top to bottom and right to left) corresponding to a 90 degrees rotation
+or "btlr" corresponding to a 270 degrees rotation.</p>
     </div>
 
     <pre class="usage"><span class='fu'>rotate</span>(<span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>j</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>rotation</span>, <span class='kw'>align</span> <span class='kw'>=</span> <span class='st'>"center"</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"body"</span>)</pre>
@@ -148,7 +173,8 @@
     </tr>
     <tr>
       <th>rotation</th>
-      <td><p>one of "lrtb", "tbrl", "btlr"</p></td>
+      <td><p>one of "lrtb", "tbrl", "btlr". Note that "btlr" is ignored
+when output is HTML.</p></td>
     </tr>
     <tr>
       <th>align</th>
@@ -163,12 +189,15 @@ one of "center" or "top" or "bottom".</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>One common case is to rotate text to minimise column space. When rotating,
-paragraph alignments will remain the same and often right aligned (
-with an effect of top aligned when rotated). Use
-<code><a href='align.html'>align(..., align = "center")</a></code> to center rotated text.</p>
-<p>When function <code>autofit</code> is used, the rotation will be
-ignored.</p>
+    <p>When function <code>autofit</code> is used, the rotation will be
+ignored. In that case, use <a href='dim_pretty.html'>dim_pretty</a> and <a href='width.html'>width</a> instead
+of <a href='autofit.html'>autofit</a>.</p>
+    <h2 class="hasAnchor" id="illustrations"><a class="anchor" href="#illustrations"></a>Illustrations</h2>
+
+    
+
+
+<p><img src='figures/fig_rotate_1.png' width=50% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other sugar functions for table style: 
@@ -184,21 +213,43 @@ ignored.</p>
 <code><a href='valign.html'>valign</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flextable.html'>flextable</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>iris</span>))
-<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'>rotate</span>(<span class='no'>ft</span>, <span class='kw'>rotation</span> <span class='kw'>=</span> <span class='st'>"tbrl"</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>, <span class='kw'>align</span> <span class='kw'>=</span> <span class='st'>"center"</span>)
-<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='align.html'>align</a></span>(<span class='no'>ft</span>, <span class='kw'>align</span> <span class='kw'>=</span> <span class='st'>"center"</span>)
-<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='autofit.html'>autofit</a></span>(<span class='no'>ft</span>)
-<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='height.html'>height</a></span>(<span class='no'>ft</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='fu'><a href='dim_pretty.html'>dim_pretty</a></span>(<span class='no'>ft</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>)$<span class='no'>widths</span>), <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>)</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>flextable</span>)
 
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flextable.html'>flextable</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>iris</span>))
+
+<span class='co'># measure column widths but only for the body part</span>
+<span class='no'>w_body</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dim_pretty.html'>dim_pretty</a></span>(<span class='no'>ft</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"body"</span>)$<span class='no'>widths</span>
+<span class='co'># measure column widths only for the header part and get the max</span>
+<span class='co'># as height value for rotated text</span>
+<span class='no'>h_header</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>( <span class='fu'><a href='dim_pretty.html'>dim_pretty</a></span>(<span class='no'>ft</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>)$<span class='no'>widths</span> )
+
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'>rotate</span>(<span class='no'>ft</span>, <span class='kw'>j</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>rotation</span><span class='kw'>=</span><span class='st'>"btlr"</span>,<span class='kw'>part</span><span class='kw'>=</span><span class='st'>"header"</span>)
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'>rotate</span>(<span class='no'>ft</span>, <span class='kw'>j</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>rotation</span><span class='kw'>=</span><span class='st'>"tbrl"</span>,<span class='kw'>part</span><span class='kw'>=</span><span class='st'>"header"</span>)
+
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='valign.html'>valign</a></span>(<span class='no'>ft</span>, <span class='kw'>valign</span> <span class='kw'>=</span> <span class='st'>"center"</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>)
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flextable</span><span class='kw ns'>::</span><span class='fu'><a href='align.html'>align</a></span>(<span class='no'>ft</span>, <span class='kw'>align</span> <span class='kw'>=</span> <span class='st'>"center"</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"all"</span>)
+
+<span class='co'># Manage header height</span>
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='height.html'>height</a></span>(<span class='no'>ft</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='no'>h_header</span> * <span class='fl'>1.1</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>)
+<span class='co'># ... mainly because Word don't handle auto height with rotated headers</span>
+<span class='no'>ft</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hrule.html'>hrule</a></span>(<span class='no'>ft</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"exact"</span>, <span class='kw'>part</span> <span class='kw'>=</span> <span class='st'>"header"</span>)
+
+<span class='no'>ft</span></div><div class='output co'>#&gt; a flextable object.
+#&gt; col_keys: `Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, `Species` 
+#&gt; header has 1 row(s) 
+#&gt; body has 6 row(s) 
+#&gt; original dataset sample: 
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+#&gt; 2          4.9         3.0          1.4         0.2  setosa
+#&gt; 3          4.7         3.2          1.3         0.2  setosa
+#&gt; 4          4.6         3.1          1.5         0.2  setosa
+#&gt; 5          5.0         3.6          1.4         0.2  setosa</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -206,11 +257,11 @@ ignored.</p>
       <footer>
       <link href="../ardata.css" rel="stylesheet">
 <div class="author">
-  <p>Version&nbsp;0.5.7.5 - Developed by David Gohel - proudly brought to you by <a href="http://www.ardata.fr"><img alt="ardata" src='../ardata-logo.svg' style="vertical-align:middle;height:24px;"/></a>
+  <p>Version&nbsp;0.5.10 - Developed by David Gohel - proudly brought to you by <a href="http://www.ardata.fr"><img alt="ardata" src='../ardata-logo.svg' style="vertical-align:middle;height:24px;"/></a>
   </p>
 </div>
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
 <script>

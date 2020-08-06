@@ -43,7 +43,7 @@ text_struct <- function( nrow, keys,
                         bold = FALSE, italic = FALSE, underlined = FALSE,
                         font.family = "Arial",
                         vertical.align = "baseline",
-                        shading.color = "transparent" ){
+                        shading.color = "transparent", ... ){
   x <- list(
     color = fpstruct(nrow = nrow, keys = keys, default = color),
     font.size = fpstruct(nrow = nrow, keys = keys, default = font.size),
@@ -60,10 +60,10 @@ text_struct <- function( nrow, keys,
 
 `[<-.text_struct` <- function( x, i, j, property, value ){
   if( inherits(value, "fp_text")) {
-    for(property in names(value)){
+    for(property in intersect(names(value), names(x))){
       x[[property]][i, j] <- value[[property]]
     }
-  } else {
+  } else if(property %in% names(x)) {
     x[[property]][i, j] <- value
   }
 
@@ -118,7 +118,7 @@ par_struct <- function( nrow, keys,
                         border.color.bottom = "transparent", border.color.top = "transparent", border.color.left = "transparent", border.color.right = "transparent",
                         border.style.bottom = "solid", border.style.top = "solid", border.style.left = "solid", border.style.right = "solid",
                         shading.color = "transparent",
-                        keep.next = FALSE){
+                        keep.next = FALSE, ...){
 
   x <- list(
     text.align = fpstruct(nrow = nrow, keys = keys, default = text.align),
@@ -170,10 +170,10 @@ add_rows.par_struct <- function(x, nrows, first, ...){
 `[<-.par_struct` <- function( x, i, j, property, value ){
   if( inherits(value, "fp_par")) {
     value <- cast_borders(value)
-    for(property in names(value)){
+    for(property in intersect(names(value), names(x))){
       x[[property]][i, j] <- value[[property]]
     }
-  } else {
+  } else if(property %in% names(x)) {
     x[[property]][i, j] <- value
   }
 
@@ -197,14 +197,26 @@ as.data.frame.par_struct <- function(object, ...){
 }
 
 
-add_parstyle_column <- function(x, type = "html"){
+add_parstyle_column <- function(x, type = "html", text.direction, valign){
 
   if( type %in% "html"){
     shading <- ifelse( colalpha(x$shading.color) > 0,
                        sprintf("background-color:%s;", colcodecss(x$shading.color) ),
                        "background-color:transparent;")
 
+    textdir <- ifelse(text.direction %in% "tbrl", "writing-mode:vertical-rl;",
+                      ifelse(text.direction %in% "btlr", "writing-mode:vertical-lr;transform: rotate(180deg);", "")
+                      )
     textalign <- sprintf("text-align:%s;", x$text.align )
+    textalign_margins <- rep("", length(text.direction))
+
+    textalign_margins[text.direction %in% "tbrl" & valign %in% "center"] <- "margin-left:auto;margin-right:auto;"
+    textalign_margins[text.direction %in% "tbrl" & valign %in% "top"] <- "margin-left:auto;"
+    textalign_margins[text.direction %in% "tbrl" & valign %in% "bottom"] <- "margin-right:auto;"
+    textalign_margins[text.direction %in% "btlr" & valign %in% "center"] <- "margin-left:auto;margin-right:auto;"
+    textalign_margins[text.direction %in% "btlr" & valign %in% "top"] <- "margin-right:auto;"
+    textalign_margins[text.direction %in% "btlr" & valign %in% "bottom"] <- "margin-left:auto;"
+    textalign <- paste0(textalign, textalign_margins)
 
     bb <- border_css(
       color = x$border.color.bottom, width = x$border.width.bottom,
@@ -224,7 +236,7 @@ add_parstyle_column <- function(x, type = "html"){
     padding.left <- sprintf("padding-left:%s;", css_px(x$padding.left) )
     padding.right <- sprintf("padding-right:%s;", css_px(x$padding.right) )
 
-    style_column <- paste0("style=\"margin:0;", textalign, bb, bt, bl, br,
+    style_column <- paste0("style=\"margin:0;", textalign, textdir, bb, bt, bl, br,
                            padding.bottom, padding.top, padding.left, padding.right, shading, "\"" )
   } else if( type %in% "wml"){
 
@@ -273,9 +285,9 @@ add_parstyle_column <- function(x, type = "html"){
   x[, c("row_id", "col_id", "style_str")]
 }
 
-par_data <- function(x, run_data, type){
+par_data <- function(x, run_data, type, text.direction, valign){
   paragraphs <- as.data.frame(x)
-  paragraphs <- add_parstyle_column(paragraphs, type = type)
+  paragraphs <- add_parstyle_column(paragraphs, type = type, text.direction = text.direction, valign = valign)
   setDT(paragraphs)
   dat <- merge(paragraphs, run_data, by = c("row_id", "col_id"), all.x = TRUE)
   setDF(paragraphs)
@@ -302,7 +314,8 @@ cell_struct <- function( nrow, keys,
                          border.width.bottom = 1, border.width.top = 1, border.width.left = 1, border.width.right = 1,
                          border.color.bottom = "transparent", border.color.top = "transparent", border.color.left = "transparent", border.color.right = "transparent",
                          border.style.bottom = "solid", border.style.top = "solid", border.style.left = "solid", border.style.right = "solid",
-                         background.color = "#34CC27", width = NA_real_, height = NA_real_ ){
+                         background.color = "#34CC27", width = NA_real_, height = NA_real_, hrule = "auto",
+                         ...){
 
   check_choice( value = vertical.align, choices = c( "top", "center", "bottom" ) )
   check_choice( value = text.direction, choices = c( "lrtb", "tbrl", "btlr" ) )
@@ -334,7 +347,8 @@ cell_struct <- function( nrow, keys,
 
 
     text.direction = fpstruct(nrow = nrow, keys = keys, default = text.direction),
-    background.color = fpstruct(nrow = nrow, keys = keys, default = background.color)
+    background.color = fpstruct(nrow = nrow, keys = keys, default = background.color),
+    hrule = fpstruct(nrow = nrow, keys = keys, default = hrule)
   )
   class(x) <- "cell_struct"
   x
@@ -351,10 +365,10 @@ add_rows.cell_struct <- function(x, nrows, first, ...){
 
   if( inherits(value, "fp_cell")) {
     value <- cast_borders(value)
-    for(property in names(value)){
+    for(property in intersect(names(value), names(x))){
       x[[property]][i, j] <- value[[property]]
     }
-  } else {
+  } else if(property %in% names(x)) {
     x[[property]][i, j] <- value
   }
 
@@ -380,7 +394,7 @@ as.data.frame.cell_struct <- function(object, ...){
   data
 }
 
-add_cellstyle_column <- function(x, type = "html"){
+add_cellstyle_column <- function(x, type = "html", text.align ){
 
   if( type %in% "html"){
     background.color <- ifelse( colalpha(x$background.color) > 0,
@@ -388,10 +402,14 @@ add_cellstyle_column <- function(x, type = "html"){
                        "background-color:transparent;")
 
     width <- ifelse( is.na(x$width), "", sprintf("width:%s;", css_px(x$width * 72) ) )
-    height <- ifelse( is.na(x$height), "", sprintf("height:%s;", css_px(x$height * 72 ) ) )
+    height <- ifelse( is.na(x$height) | x$hrule %in% "exact", sprintf("height:%s;", css_px(x$height * 72 ) ), "" )
+
     vertical.align <- ifelse(
       x$vertical.align %in% "center", "vertical-align: middle;",
       ifelse(x$vertical.align %in% "top", "vertical-align: top;", "vertical-align: bottom;") )
+    vertical.align[x$text.direction %in% "tbrl" & text.align %in% "center"] <- "vertical-align:middle;"
+    vertical.align[x$text.direction %in% "tbrl" & text.align %in% "left"] <- "vertical-align:top;"
+    vertical.align[x$text.direction %in% "tbrl" & text.align %in% "right"] <- "vertical-align:bottom;"
 
     bb <- border_css(
       color = x$border.color.bottom, width = x$border.width.bottom,
@@ -483,11 +501,14 @@ add_cellstyle_column <- function(x, type = "html"){
   x[, c("row_id", "col_id", "style_str")]
 }
 
-cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, rowheights, header_col, header = FALSE){
+
+cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, rowheights, hrule, text.align, header_col, header = FALSE){
+
   x[,, "width"] <- rep(colwidths, each = x$vertical.align$nrow)
   x[,, "height"] <- rep(rowheights, x$vertical.align$ncol)
+  x[,, "hrule"] <- rep(hrule, x$vertical.align$ncol)
   cells <- as.data.frame(x)
-  cells <- add_cellstyle_column(cells, type = type)
+  cells <- add_cellstyle_column(cells, type = type, text.align = text.align)
   setDT(cells)
   dat <- merge(cells, par_data, by = c("row_id", "col_id"), all.x = TRUE)
 
@@ -533,8 +554,8 @@ cell_data <- function(x, par_data, type, span_rows, span_columns, colwidths, row
 
     text_directions <- x$text.direction[]
     class_ <- character(nrow(dat))
-    rotated <- text_directions %in% c("btlr", "tbrl")
-    class_[rotated] <- sprintf(" class=\"%s\"", text_directions[rotated])
+    # rotated <- text_directions %in% c("btlr", "tbrl")
+    # class_[rotated] <- sprintf(" class=\"%s\"", text_directions[rotated])
 
     if (is.null(header_col)) {
       header_check <- FALSE
@@ -583,7 +604,7 @@ add_rows.chunkset_struct <- function(x, nrows, first, data, ...){
     id <- rev(rev(seq_len(x$content$nrow) )[seq_len(nrows)] )
   }
 
-  newcontent <- lapply(data[x$content$keys], function(x) as_paragraph(as_chunk(x, formater = format_fun)) )
+  newcontent <- lapply(data[x$content$keys], function(x) as_paragraph(as_chunk(x, formatter = format_fun)) )
   x$content[id,x$content$keys] <- Reduce(append, newcontent)
   x
 }
@@ -731,9 +752,6 @@ add_runstyle_column <- function(x, type = "html"){
       x$vertical.align %in% "superscript", " baseline=\"40000\"",
       ifelse(x$vertical.align %in% "subscript"," baseline=\"-40000\"", "") )
 
-
-    shading <- sprintf("<w:shd w:val=\"clear\" w:color=\"auto\" w:fill=\"%s\"/>", colcode0(x$shading.color) )
-
     color <- paste0(
       sprintf("<a:solidFill><a:srgbClr val=\"%s\">", colcode0(x$color) ),
       sprintf("<a:alpha val=\"%.0f\"/>", colalpha(x$color) ),
@@ -742,6 +760,7 @@ add_runstyle_column <- function(x, type = "html"){
       sprintf("<a:highlight><a:srgbClr val=\"%s\">", colcode0(x$shading.color) ),
       sprintf("<a:alpha val=\"%.0f\"/>", colalpha(x$shading.color) ),
       "</a:srgbClr></a:highlight>" )
+    shading.color[colalpha(x$shading.color) < 1] <- ""
 
     style_column <- paste0("<a:rPr", font.size, italic, bold, underline, vertical.align, ">",
                            color, family, shading.color, "%s",
@@ -817,6 +836,7 @@ run_data <- function(x, type){
   } else if( type %in% "html" ){
 
     text_nodes_str <-  gsub("\n", "<br>", htmlEscape(x$txt))
+    text_nodes_str <-  gsub("\t", "&emsp;", text_nodes_str)
 
     # manage text
     str <- character(nrow(x))

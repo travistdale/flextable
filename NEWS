@@ -1,8 +1,89 @@
+# flextable 0.5.11
+
+## new features
+
+* save_as_html now accepts argument `encoding`
+
+## Issues
+
+* selection when i or j was integer(0) was resulting to all rows, it's now fixed. To
+select all rows or columns, use `i = NULL` or `j = NULL`, to select none, `i = integer(0)` or
+`j = integer(0)`.
+* tab were not displayed when output was HTML
+
+# flextable 0.5.10
+
+## new features
+
+* flextable captions in Word can be auto-numbered and bookmarked
+* function `footnote` is now able to add inline footnotes
+* support for bookdown references
+* new as_flextable methods for lm and glm objects and xtable (replacing `xtable_to_flextable()`)
+* new sugar function `continuous_summary()`: summarize continuous columns in a flextable
+* function `autofit` can now use only some parts of the tables. This allows
+for example to no longer have gigantic columns by not taking into account the "footer" part that is often composed of long texts.
+* bookdown and xaringan HTML outputs should now be rendered as expected - table css has been overwritten.
+* new function `set_table_properties` lets adapt flextable size as "100%", "50%" of the available width
+for Word and HTML.
+
+## Changes
+
+* manual pages have been improved and illustrations are added
+* `bg()` and `color()` now accept functions (i.e. `scales::col_numeric()`)
+
+# flextable 0.5.9
+
+## Changes
+
+* defunct of `display()`
+* rename arg 'formater' to 'formatter' of `as_chunk` (#152)
+
+## Internal
+
+* drop `officer::fp_sign` importation that was not used anymore so that officer can
+ drop digest dependency.
+
+
+# flextable 0.5.8
+
+## Changes
+
+* deprecation of `display()`.
+* defunct of `ph_with_flextable_at()`
+* function `docx_value()` has new arguments `ft.align`, `ft.split` and `tab.cap.style`
+* function `htmltools_value()` has a new argument `ft.align`
+
+## new features
+
+* new function `flextable_html_dependency` to get flextable htmltools::htmlDependancy. This is
+necessary to output flextables in html R Markdown documents from loop or other nested operations.
+
+
+## Issues
+
+* fix issue #188, add_rows error that came with version 0.5.7
+
+
 # flextable 0.5.7
+
+## new features
+
+* new suger functions `save_as_docx`, `save_as_pptx` that lets users export flextable objects
+  to PowerPoint or Word documents.
 
 ## Changes
 
 * merge_v can use hidden columns.
+* new function `hrule` to control how row heights should be
+  understood (at least, auto, exact)
+* Allow unused values in set_header_labels - PR #172 from DanChaltiel
+* deprecation of ph_with_flextable_at, ph_with_flextable will be deprected in the next release
+
+## Issues
+
+* fix issue #180, background color of runs transparency issue with googlesheet
+* fix issue #157, issue with rotate and HTML output
+
 
 # flextable 0.5.6
 

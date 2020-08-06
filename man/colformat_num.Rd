@@ -12,6 +12,7 @@ colformat_num(x, ...)
   j = NULL,
   col_keys = NULL,
   big.mark = ",",
+  decimal.mark = getOption("OutDec"),
   digits = 2,
   na_str = "",
   prefix = "",
@@ -30,7 +31,7 @@ row selector.}
 \item{col_keys}{names of the colkeys. Will be deprectated in favor of j in the next
 version.}
 
-\item{big.mark, digits}{see \code{\link[base]{formatC}}}
+\item{big.mark, digits, decimal.mark}{see \code{\link[=formatC]{formatC()}}}
 
 \item{na_str}{string to be used for NA values}
 
@@ -41,16 +42,22 @@ version.}
 \description{
 Format numeric cells in a flextable.
 }
+\section{Illustrations}{
+
+
+\if{html}{\figure{fig_colformat_num_1.png}{options: width=50\%}}
+}
+
 \examples{
 dat <- iris
 dat[1:4, 1] <- NA
 dat[, 2] <- dat[, 2] * 1000000
 
-ft <- flextable(dat)
-colkeys = c("Sepal.Length", "Sepal.Width",
-            "Petal.Length", "Petal.Width")
+ft <- flextable(head(dat))
+j = c("Sepal.Length", "Sepal.Width",
+   "Petal.Length", "Petal.Width")
 ft <- colformat_num(
-  x = ft, col_keys = colkeys,
+  x = ft, j = j,
   big.mark=",", digits = 2, na_str = "N/A")
 autofit(ft)
 }
@@ -59,6 +66,7 @@ Other cells formatters:
 \code{\link{colformat_char}()},
 \code{\link{colformat_int}()},
 \code{\link{colformat_lgl}()},
-\code{\link{compose}()}
+\code{\link{compose}()},
+\code{\link{set_formatter}()}
 }
 \concept{cells formatters}

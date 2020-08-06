@@ -31,8 +31,11 @@ reference:
     contents:
     - starts_with("merge_")
     - starts_with("height")
+    - set_table_properties
     - width
+    - hrule
     - autofit
+    - fit_to_width
     - dim.flextable
     - dim_pretty
     - flextable_dim
@@ -95,9 +98,17 @@ reference:
     - plot.flextable
     - save_as_image
     - save_as_html
-    - format.flextable
+    - save_as_docx
+    - save_as_pptx
     - htmltools_value
+    - docx_value
     - as_raster
+  - title: as_flextable
+    desc:  get flextable from objects and utilities
+    contents:
+    - starts_with("as_flextable")
+    - continuous_summary
+    - proc_freq
 
 navbar:
   title: flextable
@@ -109,14 +120,18 @@ navbar:
     href: articles/selectors.html
   - text: Layout
     href: articles/layout.html
-  - text: Format visual properties
+  - text: Visual properties
     href: articles/format.html
   - text: Format Content
     href: articles/display.html
-  - text: Render as image
-    href: articles/offcran/images.html
-  - text: Examples
-    href: articles/offcran/examples.html
+  - text: More
+    menu:
+    - text: As image
+      href: articles/offcran/images.html
+    - text: as flextable
+      href: articles/offcran/as_flextable.html
+    - text: Examples
+      href: articles/offcran/examples.html
   right:
   - text: Function reference
     href: reference/index.html

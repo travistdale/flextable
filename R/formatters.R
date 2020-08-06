@@ -16,6 +16,10 @@
 #' ft <- theme_vanilla( ft )
 #' ft
 #' @export
+#' @section Illustrations:
+#'
+#' \if{html}{\figure{fig_set_formatter_1.png}{options: width=50\%}}
+#' @family cells formatters
 set_formatter <- function(x, ..., values = NULL, part = "body"){
 
 
@@ -50,6 +54,7 @@ set_formatter <- function(x, ..., values = NULL, part = "body"){
 #' format date and date time columns.
 #' @param false,true string to be used for logical columns
 #' @param na_str string for NA values
+#' @family cells formatters
 set_formatter_type <- function(x, fmt_double = "%.03f", fmt_integer = "%.0f",
                                fmt_date = "%Y-%m-%d", fmt_datetime = "%Y-%m-%d %H:%M:%S",
                                true = "true", false = "false",
@@ -85,10 +90,13 @@ set_formatter_type <- function(x, fmt_double = "%.03f", fmt_integer = "%.0f",
 #' @family cells formatters
 #' @examples
 #' dat <- iris
-#' ft <- flextable(dat)
+#' ft <- flextable(head(dat))
 #' ft <- colformat_char(
-#'   x = ft, col_keys = "Species", suffix = "!")
-#' autofit(ft)
+#'   x = ft, j = "Species", suffix = "!")
+#' ft <- autofit(ft)
+#' @section Illustrations:
+#'
+#' \if{html}{\figure{fig_colformat_char_1.png}{options: width=50\%}}
 colformat_char <- function(x, ...){
   UseMethod("colformat_char")
 }
@@ -97,20 +105,23 @@ colformat_char <- function(x, ...){
 #' @title format numeric cells
 #' @description Format numeric cells in a flextable.
 #' @inheritParams colformat_char
-#' @param big.mark,digits see \code{\link[base]{formatC}}
+#' @param big.mark,digits,decimal.mark see [formatC()]
 #' @family cells formatters
 #' @examples
 #' dat <- iris
 #' dat[1:4, 1] <- NA
 #' dat[, 2] <- dat[, 2] * 1000000
 #'
-#' ft <- flextable(dat)
-#' colkeys = c("Sepal.Length", "Sepal.Width",
-#'             "Petal.Length", "Petal.Width")
+#' ft <- flextable(head(dat))
+#' j = c("Sepal.Length", "Sepal.Width",
+#'    "Petal.Length", "Petal.Width")
 #' ft <- colformat_num(
-#'   x = ft, col_keys = colkeys,
+#'   x = ft, j = j,
 #'   big.mark=",", digits = 2, na_str = "N/A")
 #' autofit(ft)
+#' @section Illustrations:
+#'
+#' \if{html}{\figure{fig_colformat_num_1.png}{options: width=50\%}}
 colformat_num <- function(x, ...){
   UseMethod("colformat_num")
 }
@@ -118,16 +129,17 @@ colformat_num <- function(x, ...){
 #' @title format integer cells
 #' @description Format integer cells in a flextable.
 #' @inheritParams colformat_char
-#' @param big.mark see \code{\link[base]{formatC}}
+#' @param big.mark see [formatC()]
 #' @family cells formatters
 #' @export
 #' @examples
-#' dat <- mtcars
+#' ft <- flextable(head(mtcars))
+#' j <- c("vs", "am", "gear", "carb")
+#' ft <- colformat_int(x = ft, j = j, prefix = "# ")
+#' ft
+#' @section Illustrations:
 #'
-#' ft <- flextable(dat)
-#' colkeys <- c("vs", "am", "gear", "carb")
-#' ft <- colformat_int(x = ft, col_keys = colkeys, prefix = "# ")
-#' autofit(ft)
+#' \if{html}{\figure{fig_colformat_int_1.png}{options: width=100\%}}
 colformat_int <- function(x, ...){
   UseMethod("colformat_int")
 }
@@ -142,8 +154,11 @@ colformat_int <- function(x, ...){
 #' dat <- data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE))
 #'
 #' ft <- flextable(dat)
-#' ft <- colformat_lgl(x = ft, col_keys = c("a", "b"))
+#' ft <- colformat_lgl(x = ft, j = c("a", "b"))
 #' autofit(ft)
+#' @section Illustrations:
+#'
+#' \if{html}{\figure{fig_colformat_lgl_1.png}{options: width=20\%}}
 colformat_lgl <- function(x, ...){
   UseMethod("colformat_lgl")
 }
@@ -151,7 +166,9 @@ colformat_lgl <- function(x, ...){
 
 #' @export
 #' @rdname colformat_num
-colformat_num.flextable <- function(x, j = NULL, col_keys = NULL, big.mark=",", digits = 2, na_str = "", prefix = "", suffix = "", ...){
+colformat_num.flextable <- function(x, j = NULL, col_keys = NULL, big.mark=",",
+                                    decimal.mark = getOption("OutDec"),
+                                    digits = 2, na_str = "", prefix = "", suffix = "", ...){
 
   if(!is.null(col_keys)){
     warning("argument col_keys is deprecated in favor of argument j")
@@ -159,7 +176,7 @@ colformat_num.flextable <- function(x, j = NULL, col_keys = NULL, big.mark=",", 
   }
 
   fun_ <- function(x) {
-    out <- paste0(prefix, formatC(x, format="f", big.mark=big.mark, digits = digits), suffix )
+    out <- paste0(prefix, formatC(x, format="f", big.mark=big.mark, digits = digits, decimal.mark = decimal.mark), suffix )
     ifelse(is.na(x), na_str, out)
   }
   docall_display(j, fun_, x, ...)

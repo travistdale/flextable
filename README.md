@@ -8,10 +8,9 @@ Status](https://travis-ci.org/davidgohel/flextable.svg?branch=master)](https://t
 [![Build
 status](https://ci.appveyor.com/api/projects/status/github/davidgohel/flextable?branch=master)](https://ci.appveyor.com/project/davidgohel/flextable/branch/master)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/flextable)](https://cran.r-project.org/package=flextable)
-![cranlogs](http://cranlogs.r-pkg.org./badges/flextable)
-[![codecov](https://codecov.io/gh/davidgohel/flextable/branch/master/graph/badge.svg)](https://codecov.io/gh/davidgohel/flextable)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
+![cranlogs](http://cranlogs.r-pkg.org./badges/flextable) [![Project
+Status: Active – The project has reached a stable, usable state and is
+being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
 <p align="center">
@@ -25,10 +24,11 @@ reporting and publications. Tables can be embedded within:
 
   - R Markdown documents with support for HTML, Word and PowerPoint
     documents.
-  - Microsoft Word or PowerPoint documents.
-  - PDF documents with package `pagedown` (it’s only HTML)
+  - Microsoft Word or PowerPoint documents with package
+    [officer](https://davidgohel.github.io/officer/).
+  - PDF documents with package `pagedown`
 
-Tables can also be rendered as R plots or graphic file (png, pdf and
+Tables can also be rendered as R plots or graphic files (png, pdf and
 jpeg).
 
 ## Getting Started
@@ -80,6 +80,10 @@ questions about how to use the package, visit Stackoverflow and use tags
 `flextable` and `r` [Stackoverflow
 link](https://stackoverflow.com/questions/tagged/flextable+r)\! I
 usually read them and answer when possible.
+
+Don’t send me a private emails to get free R support or to ask questions
+about using the package. They are systematically ignored except if you
+are French in which case I send you a commercial proposal :)
 
 ## Contributing to the package
 
